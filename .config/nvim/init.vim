@@ -128,3 +128,21 @@ colorscheme gruvbox-material
 
 " let g:R_external_term = 1 " Run R in an external terminal (or Rgui.exe)
 " let g:R_external_term = 'st' " Run R in in xterm
+
+" Custom functions
+function! PandocCompile()
+        let fullPath = expand("%:p")
+        let pdfFile = substitute(fullPath, ".md", ".pdf", "")
+    execute "silent !pandoc " . fnameescape(fullPath) . " -o " . fnameescape(pdfFile)
+endfunction
+
+nnoremap <A-c> :call PandocCompile()<CR>
+
+function! PandocCompileAndShow()
+        let fullPath = expand("%:p")
+        let pdfFile = substitute(fullPath, ".md", ".pdf", "")
+    execute "silent !pandoc " . fnameescape(fullPath) . " -o " . fnameescape(pdfFile)
+        execute "silent !zathura '" . pdfFile . "' &"
+endfunction
+
+nnoremap <A-s> :call PandocCompileAndShow()<CR>
