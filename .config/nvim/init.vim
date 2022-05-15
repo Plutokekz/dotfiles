@@ -46,7 +46,7 @@ tnoremap <Esc> <C-\><C-n>
 "  autocmd BufRead,BufNewFile *.h,*.c set filetype=c.doxygen
 "augroup END
 
-call plug#begin('~/.config/nvim/plugged')
+call plug#begin('~/.config/nvim/autoload')
 
 " Complition/Language Server
 
@@ -72,7 +72,11 @@ Plug 'ncm2/ncm2-path'
 
 Plug 'sheerun/vim-polyglot'
 
+Plug 'ncm2/ncm2-ultisnips'
 
+" Snippets
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 " Terminal helper
 
 Plug 'kassio/neoterm'
@@ -84,6 +88,10 @@ Plug 'sainnhe/gruvbox-material'
 " FileManager
 
 Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
+
+Plug 'mlr-msft/vim-loves-dafny', {'for': 'dafny'}
+
+Plug 'vim-syntastic/syntastic'
 
 call plug#end()
 
@@ -99,6 +107,8 @@ let g:ncm2_pyclang#library_path = '/usr/lib64/libclang.so.5.0'
 
 " Python
 let g:ncm2_jedi#python_version=3
+" let g:python_host_prog='/usr/bin/python2'
+" let g:python3_host_prog='/usr/bin/python3'
 
 " mardown
 " let g:ncm2_biblatex=TRUE
@@ -111,6 +121,19 @@ autocmd BufEnter * call ncm2#enable_for_buffer()
 
 " IMPORTANT: :help Ncm2PopupOpen for more information
 set completeopt=noinsert,menuone,noselect
+
+" setup dafny plugin
+
+" (optional) set your leader key (the default is <\>)
+let mapleader=","
+" Tell Syntastic to:
+" - check files on save.
+" - but only check Dafny files when requested.
+let g:syntastic_mode_map = {
+        \ "mode": "active",
+        \ "passive_filetypes": ["dafny"] }
+" (optional) map "save and check current file" to <leader>c
+noremap <Leader>c :w<CR>:SyntasticCheck<CR>
 
 
 " theme config
@@ -146,3 +169,14 @@ function! PandocCompileAndShow()
 endfunction
 
 nnoremap <A-s> :call PandocCompileAndShow()<CR>
+
+
+" Press enter key to trigger snippet expansion
+" The parameters are the same as `:help feedkeys()`
+inoremap <silent> <expr> <Tap> ncm2_ultisnips#expand_or("\<Tap>", 'n')
+
+" c-j c-k for moving in snippet
+" let g:UltiSnipsExpandTrigger          = "<Plug>(ultisnips_expand)"
+let g:UltiSnipsJumpForwardTrigger       = "<c-j>"
+let g:UltiSnipsJumpBackwardTrigger      = "<c-k>"
+let g:UltiSnipsRemoveSelectModeMappings = 0
